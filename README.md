@@ -1,0 +1,2 @@
+# interpolasyon
+İnterpolasyon
