@@ -1,0 +1,24 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Üç örnek veri noktası
+x_points = np.array([1, 2, 3])
+y_points = np.array([2, 3, 5])
+
+# Denklem sistemi kur
+A = np.vstack([x_points**2, x_points, np.ones(3)]).T
+coeffs = np.linalg.solve(A, y_points)
+
+a, b, c = coeffs
+print(f"Polinom: P(x) = {a:.2f}x² + {b:.2f}x + {c:.2f}")
+
+# Grafik çizimi
+x = np.linspace(min(x_points)-1, max(x_points)+1, 200)
+y = a * x**2 + b * x + c
+
+plt.plot(x, y, label='Interpolasyon Parabolü')
+plt.scatter(x_points, y_points, color='red', label='Veri Noktaları')
+plt.legend()
+plt.grid()
+plt.title("İkinci Dereceden Interpolasyon")
+plt.show()
