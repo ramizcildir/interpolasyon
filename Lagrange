@@ -1,0 +1,37 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Fiziksel parametreler
+g = 9.81  # yerçekimi ivmesi (m/s^2)
+l = 1.0   # sarkaç uzunluğu (m)
+m = 1.0   # kütle (kg)
+
+# Zaman aralığı
+t = np.linspace(0, 10, 1000)  # 0–10 saniye, 1000 örnekleme noktası
+
+# Başlangıç koşulları
+theta0 = 0.5  # rad cinsinden açı
+omega0 = 0.0  # başlangıç açısal hızı
+
+# Doğrusal sarkaç çözümü: θ(t) ≈ θ0 * cos(sqrt(g/l) * t)
+omega = np.sqrt(g / l)
+theta = theta0 * np.cos(omega * t)
+theta_dot = -theta0 * omega * np.sin(omega * t)
+
+# Enerji hesapları
+T = 0.5 * m * (l * theta_dot)**2                          # Kinetik enerji
+V = -m * g * l * np.cos(theta)                            # Potansiyel enerji
+L = T - V                                                 # Lagrange fonksiyonu
+
+# Grafik çizimi
+plt.figure(figsize=(10, 6))
+plt.plot(t, T, label='Kinetik Enerji T(t)', color='blue')
+plt.plot(t, V, label='Potansiyel Enerji V(t)', color='green')
+plt.plot(t, L, label='Lagrange Fonksiyonu L(t)', color='red')
+plt.title('Lagrange Fonksiyonu: Basit Sarkaç')
+plt.xlabel('Zaman (saniye)')
+plt.ylabel('Enerji (Joule)')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
