@@ -1,0 +1,31 @@
+import numpy as np
+
+def forward_difference(f, x, h):
+    return (f(x + h) - f(x)) / h
+
+# Fonksiyon ve analitik türevi
+def f(x):
+    return np.sin(x)
+
+def df_exact(x):
+    return np.cos(x)
+
+# Parametreler
+x0 = np.pi / 4  # 45 derece
+h = 0.01
+
+# Yaklasik turev
+derivative_approx = forward_difference(f, x0, h)
+
+# Gercek turev
+derivative_exact = df_exact(x0)
+
+# Hata hesabı
+error = abs(derivative_exact - derivative_approx)
+
+# Sonucları yazdıralım
+print(f"x = {x0:.4f}")
+print(f"Adım boyu h = {h}")
+print(f"Yaklaşık türev = {derivative_approx:.6f}")
+print(f"Gerçek türev  = {derivative_exact:.6f}")
+print(f"Hata = {error:.6e}")
