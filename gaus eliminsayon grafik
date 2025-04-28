@@ -1,0 +1,57 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import copy
+
+# Orijinal sistem (3x3)
+A = np.array([[2.0, 1.0, -1.0],
+              [-3.0, -1.0, 2.0],
+              [-2.0, 1.0, 2.0]])
+b = np.array([8.0, -11.0, -3.0])
+
+# Augmented matrix
+Ab = np.hstack((A, b.reshape(-1,1)))
+
+# Adim adim saklamak icin liste
+data_steps = [copy.deepcopy(Ab)]
+
+n = len(b)
+
+# Gauss Eliminasyon Basliyor
+for i in range(n):
+    # Pivotu 1 yap
+    pivot = Ab[i,i]
+    Ab[i] = Ab[i] / pivot
+    data_steps.append(copy.deepcopy(Ab))
+    
+    # Alt satirlari sifirla
+    for j in range(i+1, n):
+        factor = Ab[j,i]
+        Ab[j] = Ab[j] - factor * Ab[i]
+        data_steps.append(copy.deepcopy(Ab))
+
+# Geri yerine koyma (Back Substitution)
+x = np.zeros(n)
+for i in range(n-1, -1, -1):
+    x[i] = (Ab[i, -1] - np.dot(Ab[i, i+1:n], x[i+1:n])) / Ab[i,i]
+
+print("Cozum x:", x)
+
+# Grafik cizim fonksiyonu
+def plot_heatmaps(steps):
+    fig, axs = plt.subplots(1, len(steps), figsize=(3*len(steps), 3))
+
+    if len(steps) == 1:
+        axs = [axs]
+
+    for idx, step in enumerate(steps):
+        im = axs[idx].imshow(step, cmap='coolwarm', interpolation='nearest', vmin=-10, vmax=10)
+        axs[idx].set_title(f"Adim {idx}")
+        for (i, j), val in np.ndenumerate(step):
+            axs[idx].text(j, i, f'{val:.1f}', ha='center', va='center', color='black')
+
+    fig.colorbar(im, ax=axs, orientation='vertical', fraction=0.02)
+    plt.tight_layout()
+    plt.show()
+
+# Grafik goster
+plot_heatmaps(data_steps)
