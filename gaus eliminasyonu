@@ -1,0 +1,58 @@
+% Gauss Eliminasyonu ve Grafik - MATLAB
+
+A = [2 1 -1;
+    -3 -1 2;
+    -2 1 2];
+b = [8; -11; -3];
+
+% Augmented matrix
+Ab = [A b];
+
+% Adim adim kaydetmek icin cell array
+steps = {Ab};
+
+n = length(b);
+
+% Gauss Eliminasyon
+for i = 1:n
+    % Pivotu 1 yap
+    pivot = Ab(i,i);
+    Ab(i,:) = Ab(i,:) / pivot;
+    steps{end+1} = Ab;
+
+    % Alt satirlari sifirla
+    for j = i+1:n
+        factor = Ab(j,i);
+        Ab(j,:) = Ab(j,:) - factor * Ab(i,:);
+        steps{end+1} = Ab;
+    end
+end
+
+% Geri yerine koyma (Back Substitution)
+x = zeros(n,1);
+for i = n:-1:1
+    x(i) = (Ab(i,end) - Ab(i,i+1:n)*x(i+1:n)) / Ab(i,i);
+end
+
+disp('Cozum x:')
+disp(x)
+
+% Grafik Cizim
+figure;
+num_steps = length(steps);
+for k = 1:num_steps
+    subplot(1,num_steps,k);
+    imagesc(steps{k});
+    colormap('cool');
+    colorbar;
+    caxis([-10 10]);
+    title(['Adim ' num2str(k-1)]);
+    textStrings = strtrim(cellstr(num2str(steps{k}(:),'%0.1f')));
+    [xText, yText] = meshgrid(1:size(steps{k},2), 1:size(steps{k},1));
+    text(xText(:), yText(:), textStrings(:), 'HorizontalAlignment','center', 'Color','black');
+end
+
+tsgcf = gcf;
+ts.Position = get(gcf, 'Position');
+ts.Position(3) = ts.Position(3) * 1.5; % Genisligi arttir
+set(gcf, 'Position', ts.Position);
