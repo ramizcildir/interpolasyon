@@ -1,0 +1,35 @@
+% Parametreler
+L = 1;           % Çubuk uzunluğu
+T = 0.5;         % Toplam süre
+alpha = 0.01;    % Isı iletim katsayısı
+Nx = 20;         % Uzaysal adım sayısı
+Nt = 1000;       % Zaman adım sayısı
+
+dx = L / Nx;
+dt = T / Nt;
+r = alpha * dt / dx^2;
+
+% Kararlılık kontrolü (r <= 0.5 önerilir)
+if r > 0.5
+    warning('r > 0.5, yöntem kararsız olabilir.');
+end
+
+% x ve t dizileri
+x = linspace(0, L, Nx+1);
+u = sin(pi*x);       % Başlangıç koşulu
+u(1) = 0; u(end) = 0; % Sınır koşulları
+
+% Zaman döngüsü
+for n = 1:Nt
+    u_new = u;
+    for i = 2:Nx
+        u_new(i) = u(i) + r * (u(i+1) - 2*u(i) + u(i-1));
+    end
+    u = u_new;
+end
+
+% Sonuçları çiz
+plot(x, u, 'r-', 'LineWidth', 2);
+xlabel('x'); ylabel('u(x,T)');
+title('İleri Sonlu Farklar ile 1B Isı Denklemi Çözümü');
+grid on;
