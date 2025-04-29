@@ -1,0 +1,29 @@
+% Parametreler
+L = 1; T = 0.5; alpha = 0.01;
+Nx = 20; Nt = 100;
+dx = L / Nx;
+dt = T / Nt;
+r = alpha * dt / dx^2;
+
+% Uzay ve zaman grid'i
+x = linspace(0, L, Nx+1);
+u = sin(pi * x);       % Başlangıç koşulu
+u(1) = 0; u(end) = 0;   % Sınır koşulları
+
+% Tridiagonal matris A oluştur
+main = (1 + 2*r) * ones(Nx-1,1);
+off = -r * ones(Nx-2,1);
+A = diag(main) + diag(off,1) + diag(off,-1);
+
+% Zaman döngüsü
+for n = 1:Nt
+    b = u(2:end-1)';           % Sağ taraf (bilinen önceki zaman adımı)
+    u_inner = A \ b;           % Lineer sistemi çöz
+    u = [0; u_inner; 0];       % Yeni zaman adımı (sınırları ekle)
+end
+
+% Sonuçları çiz
+plot(x, u, 'b-', 'LineWidth', 2);
+xlabel('x'); ylabel('u(x,T)');
+title('Geri Sonlu Farklar ile 1B Isı Denklemi');
+grid on;
