@@ -1,0 +1,26 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+# Veri seti
+X = np.array([1, 2, 3, 4, 5, 6]).reshape(-1, 1)  # Bağımsız değişken (X)
+y = np.array([50, 55, 65, 70, 75, 80])          # Bağımlı değişken (y)
+
+# Model oluştur
+model = LinearRegression()
+
+# Modeli eğit
+model.fit(X, y)
+
+# Regresyon doğrusunu tahmin et
+y_pred = model.predict(X)
+
+# Grafik oluştur
+plt.scatter(X, y, color='blue', label='Gerçek Veriler')  # Veriler
+plt.plot(X, y_pred, color='red', label='Regresyon Doğrusu')  # Regresyon doğrusu
+plt.xlabel("Çalışma Saati")
+plt.ylabel("Sınav Notu")
+plt.title("Lineer Regresyon Grafiği")
+plt.legend()
+plt.grid(True)
+plt.show()
