@@ -1,0 +1,9 @@
+import math
+
+def taylor_exp(x, n_terms=10):
+    result = 0
+    for n in range(n_terms):
+        result += (x**n) / math.factorial(n)
+    return result
+
+print(taylor_exp(1, 10))  # Yaklaşık e^1 = 2.718...
