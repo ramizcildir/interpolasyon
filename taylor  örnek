@@ -1,0 +1,16 @@
+import math
+
+def taylor_exponential(x, n_terms=10):
+    total = 0
+    for n in range(n_terms):
+        total += x**n / math.factorial(n)
+    return total
+
+# Örnek: x = 1 için e^x yaklaşık değeri
+x = 1
+approx = taylor_exponential(x)
+actual = math.exp(x)
+
+print(f"Taylor serisiyle yaklaşık: {approx}")
+print(f"Gerçek e^{x}: {actual}")
+print(f"Hata: {abs(approx - actual)}")
