@@ -1,0 +1,31 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# x ve y değerleri
+x_values = np.array([0.1, 0.3, 0.5])
+y_values = np.array([0.4, 0.8, 1.2, 1.4])
+
+# f(x, y) değerleri (3x4 matris)
+f = np.array([
+    [2.140, 2.681, 3.115, 3.872],
+    [3.112, 3.798, 4.410, 5.021],
+    [4.155, 4.922, 5.616, 6.328]
+])
+
+# Meshgrid oluştur (yönleri düzelt)
+X, Y = np.meshgrid(y_values, x_values)
+
+# 3D yüzey çizimi
+fig = plt.figure(figsize=(10, 6))
+ax = fig.add_subplot(111, projection='3d')
+
+surf = ax.plot_surface(X, Y, f, cmap='viridis', edgecolor='k', alpha=0.9)
+
+ax.set_title("f(x, y) Fonksiyonunun Yüzey Grafiği")
+ax.set_xlabel("y")
+ax.set_ylabel("x")
+ax.set_zlabel("f(x, y)")
+
+fig.colorbar(surf, ax=ax, shrink=0.5, aspect=10)
+plt.tight_layout()
+plt.show()
