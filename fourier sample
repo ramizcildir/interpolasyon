@@ -1,0 +1,23 @@
+import numpy as np
+
+# Sabitler
+k = 3.5e-7         # Toprağın ısı yayınım katsayısı (m^2/s)
+rho = 1800         # Yoğunluk (kg/m^3)
+C = 840            # Özgül ısı (J/kg°C)
+
+# Z (derinlik) ve T (sıcaklık) verileri (z: cm, T: °C)
+z_cm = np.array([0.0, 1.25, 3.75])  # cm cinsinden
+T = np.array([13.5, 12.0, 10.0])    # °C
+
+# Z değerini metreye çevir
+z = z_cm / 100  # m cinsinden
+
+# Sıcaklık gradyanını (dT/dz) sayısal türev ile bul (ileri fark)
+dT_dz = (T[1] - T[0]) / (z[1] - z[0])  # °C/m
+
+# Isı akısı (Fourier Yasası)
+q = -k * rho * C * dT_dz  # W/m^2
+
+# Sonuçları yazdır
+print(f"Sıcaklık gradyanı (dT/dz): {dT_dz:.2f} °C/m")
+print(f"Isı akısı (q): {q:.2f} W/m²")
