@@ -1,0 +1,47 @@
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Grid tanımı
+x = np.linspace(-2, 2, 20)
+y = np.linspace(-2, 2, 20)
+X, Y = np.meshgrid(x, y)
+
+# Skaler alan: f(x, y) = x^2 + y^2 (örneğin bir sıcaklık dağılımı)
+f = X**2 + Y**2
+
+# Gradyan (∇f) hesapla
+fx, fy = np.gradient(f, x, y)
+
+# Vektör alanı tanımı: A = (-y, x) (bu bir dönen alan örneğidir)
+A_x = -Y
+A_y = X
+
+# Diverjans (∇·A) hesapla
+divA = np.gradient(A_x, x, axis=1) + np.gradient(A_y, y, axis=0)
+
+# Curl (∇×A)_z = ∂Ay/∂x - ∂Ax/∂y (sadece z bileşeni 2D için)
+curlA = np.gradient(A_y, x, axis=1) - np.gradient(A_x, y, axis=0)
+
+# Görselleştirme
+fig, axs = plt.subplots(1, 3, figsize=(18, 5))
+
+# 1. Gradyan vektörleri
+axs[0].quiver(X, Y, fx, fy, color='blue')
+axs[0].set_title('Gradyan Vektörleri (∇f)')
+axs[0].set_aspect('equal')
+
+# 2. Diverjans
+div_plot = axs[1].contourf(X, Y, divA, cmap='coolwarm')
+axs[1].quiver(X, Y, A_x, A_y, color='black', alpha=0.4)
+axs[1].set_title('Diverjans (∇·A)')
+plt.colorbar(div_plot, ax=axs[1])
+
+# 3. Curl (rotasyonel)
+curl_plot = axs[2].contourf(X, Y, curlA, cmap='PuOr')
+axs[2].quiver(X, Y, A_x, A_y, color='black', alpha=0.4)
+axs[2].set_title('Curl (∇×A)')
+plt.colorbar(curl_plot, ax=axs[2])
+
+plt.tight_layout()
+plt.show()
