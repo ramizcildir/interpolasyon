@@ -1,0 +1,24 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import signal
+
+# Transfer fonksiyonu parametreleri
+num = [100]
+den = [0.1, 1, 0, 8, 25]  # (0.1s+1)(s^2+8s+25)
+
+system = signal.TransferFunction(num, den)
+
+# Frekans aralığı
+w = np.logspace(-1, 2, 1000)
+w, mag, phase = signal.bode(system, w)
+
+# Faz -180° olduğu yeri bul
+import pandas as pd
+
+data = pd.DataFrame({"w": w, "mag": mag, "phase": phase})
+crossing = data.iloc[(data["phase"] + 180).abs().argsort()[:1]]
+critical_gain = 0  # Burada |GH(jw)| = 1 olacak şekilde K bulunur
+
+# K = 1 / |GH(jω)| ifadesinden kritik kazanç:
+K_crit = 1 / (10**(crossing["mag"].values[0] / 20))
+print("Kritik Kazanç:", K_crit)
